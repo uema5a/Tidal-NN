@@ -11,9 +11,9 @@ public class TidalConfig extends MidnightConfig {
     public static final String WET = "wet";
 
     @Comment(category = WAVES, centered = true) public static Comment reloadReminder;
-    @Entry(category = WAVES, isSlider = true, min = 3, max = 16) public static int chunkRadius = 5;
+    @Entry(category = WAVES, isSlider = true, min = 3, max = 16) public static int chunkRadius = 10;
     @Entry(category = WAVES, min = 1, max = 1024) public static int chunkUpdatesRescanAmount = 50;
-    @Entry(category = WAVES, min = -2048, max = 2048) public static int maxRenderY = 2048;
+    @Entry(category = WAVES, min = -2048, max = 2048) public static int maxRenderY = 63;
 
     // Wet overlay = the "wet sand" patches left where waves wash up.
     //
