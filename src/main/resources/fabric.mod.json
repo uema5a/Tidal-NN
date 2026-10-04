@@ -1,11 +1,12 @@
 {
 	"schemaVersion": 1,
-	"id": "tidal",
+	"id": "tidal_nn",
 	"version": "${version}",
-	"name": "Tidal",
-	"description": "Adds ambient tidal waves to beaches and oceans!",
+	"name": "Tidal (NN fork)",
+	"description": "Adds ambient tidal waves to beaches and oceans. NN fork of Tidal by Superkat32 (MIT), with the mod id changed to tidal_nn so it can coexist with the original.",
 	"authors": [
-		"Superkat32"
+		"Superkat32",
+		"uema5a (NN fork)"
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/tidal-waves",
@@ -13,23 +14,23 @@
 		"sources": "https://github.com/Superkat32/Tidal"
 	},
 	"license": "MIT",
-	"icon": "assets/tidal/icon.png",
+	"icon": "assets/tidal_nn/icon.png",
 	"environment": "client",
 	"entrypoints": {
 		"main": [
-			"net.superkat.tidal.Tidal"
+			"net.superkat.tidalnn.Tidal"
 		],
 		"client": [
-			"net.superkat.tidal.TidalClient"
+			"net.superkat.tidalnn.TidalClient"
 		],
 		"modmenu": [
-			"net.superkat.tidal.config.ModMenuInt"
+			"net.superkat.tidalnn.config.ModMenuInt"
 		]
 	},
 	"mixins": [
-		"tidal.mixins.json"
+		"tidal_nn.mixins.json"
 	],
-	"accessWidener": "tidal.accesswidener",
+	"accessWidener": "tidal_nn.accesswidener",
 	"depends": {
 		"fabricloader": ">=0.16.10",
 		"minecraft": "1.21.1",
