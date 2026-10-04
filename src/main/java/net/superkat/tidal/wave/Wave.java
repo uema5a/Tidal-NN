@@ -13,6 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LightType;
 import net.superkat.tidal.TidalParticles;
+import net.superkat.tidal.config.TidalConfig;
 import net.superkat.tidal.particles.SprayParticleEffect;
 import org.jetbrains.annotations.Range;
 
@@ -209,27 +210,29 @@ public class Wave {
         if (this.hitBlock) return;
 
         if (!drowningAway) {
-            int sprayAmount = this.bigWave ? 3 : 1;
-            float sprayIntensity;
-            if (this.isWashingUp()) {
-                sprayIntensity = getWashingAge() / 128f;
-                if (washBounce()) sprayIntensity *= 2f;
-            } else {
-                sprayIntensity = ((float) this.age / this.maxAge) * 2.5f / (this.age / 16f);
-            }
-
-            double splashX = this.x + this.velX * 10;
-            double splashZ = this.z + this.velZ * 10;
-
-            for (int i = 0; i < sprayAmount; i++) {
-                this.world.addParticle(TidalParticles.SPLASH_PARTICLE, splashX, this.y, splashZ, this.world.random.nextGaussian() * 0.1f, Math.abs(this.world.random.nextGaussian()) * 0.1f + 0.1f, this.world.random.nextGaussian() * 0.1f);
-                if (this.bigWave) {
-                    this.world.addParticle(TidalParticles.BIG_SPLASH_PARTICLE, splashX + this.world.random.nextGaussian() / 2f, this.y, splashZ + this.world.random.nextGaussian() / 2f, 0, 0.01, 0);
+            if (this.y < TidalConfig.maxRenderY) {
+                int sprayAmount = this.bigWave ? 3 : 1;
+                float sprayIntensity;
+                if (this.isWashingUp()) {
+                    sprayIntensity = getWashingAge() / 128f;
+                    if (washBounce()) sprayIntensity *= 2f;
+                } else {
+                    sprayIntensity = ((float) this.age / this.maxAge) * 2.5f / (this.age / 16f);
                 }
+
+                double splashX = this.x + this.velX * 10;
+                double splashZ = this.z + this.velZ * 10;
+
+                for (int i = 0; i < sprayAmount; i++) {
+                    this.world.addParticle(TidalParticles.SPLASH_PARTICLE, splashX, this.y, splashZ, this.world.random.nextGaussian() * 0.1f, Math.abs(this.world.random.nextGaussian()) * 0.1f + 0.1f, this.world.random.nextGaussian() * 0.1f);
+                    if (this.bigWave) {
+                        this.world.addParticle(TidalParticles.BIG_SPLASH_PARTICLE, splashX + this.world.random.nextGaussian() / 2f, this.y, splashZ + this.world.random.nextGaussian() / 2f, 0, 0.01, 0);
+                    }
+                }
+
+
+                this.world.addParticle(new SprayParticleEffect(this.yaw - 180f, sprayIntensity, this.scale), splashX, this.y - 0.05f, splashZ, -this.velX, 0, -this.velZ);
             }
-
-
-            this.world.addParticle(new SprayParticleEffect(this.yaw - 180f, sprayIntensity, this.scale), splashX, this.y - 0.05f, splashZ, -this.velX, 0, -this.velZ);
 
             this.velX = 0;
             this.velY = 0;
@@ -257,24 +260,23 @@ public class Wave {
 
         if(this.waterfallMode && this.aboveWater && !this.waterfallSplashed && TidalWaveHandler.posIsWater(this.world, this.getBlockPos())) {
             this.waterfallSplashed = true;
-            int splashAmount = this.bigWave ? 7 : 3;
-            float splashIntensity = this.bigWave ? 0.2f : 0.1f;
-            double splashX = this.x + this.velX * 3;
-            double splashZ = this.z + this.velZ * 3;
+            if (this.y < TidalConfig.maxRenderY) {
+                int splashAmount = this.bigWave ? 7 : 3;
+                float splashIntensity = this.bigWave ? 0.2f : 0.1f;
+                double splashX = this.x + this.velX * 3;
+                double splashZ = this.z + this.velZ * 3;
 
-            for (int i = 0; i < this.width; i++) {
-                for (int j = 0; j < splashAmount; j++) {
-                    this.world.addParticle(TidalParticles.SPLASH_PARTICLE,
-                            splashX + this.world.random.nextGaussian(),
-                            this.y,
-                            splashZ + this.world.random.nextGaussian(),
-                            this.world.random.nextGaussian() * splashIntensity,
-                            Math.abs(this.world.random.nextGaussian()) * splashIntensity + splashIntensity,
-                            this.world.random.nextGaussian() * splashIntensity);
+                for (int i = 0; i < this.width; i++) {
+                    for (int j = 0; j < splashAmount; j++) {
+                        this.world.addParticle(TidalParticles.SPLASH_PARTICLE,
+                                splashX + this.world.random.nextGaussian(),
+                                this.y,
+                                splashZ + this.world.random.nextGaussian(),
+                                this.world.random.nextGaussian() * splashIntensity,
+                                Math.abs(this.world.random.nextGaussian()) * splashIntensity + splashIntensity,
+                                this.world.random.nextGaussian() * splashIntensity);
+                    }
                 }
-            }
-
-            for (int i = 0; i < splashAmount; i++) {
             }
         }
 
