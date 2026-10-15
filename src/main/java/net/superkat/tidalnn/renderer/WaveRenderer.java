@@ -17,7 +17,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.superkat.tidalnn.TidalClient;
-import net.superkat.tidalnn.compat.IrisCompat;
 import net.superkat.tidalnn.config.TidalConfig;
 import net.superkat.tidalnn.sprite.TidalSpriteHandler;
 import net.superkat.tidalnn.sprite.TidalSprites;
@@ -169,24 +168,13 @@ public class WaveRenderer {
 
     public void renderOverlays(BufferBuilder buffer, Camera camera, Set<BlockPos> coveredBlocks) {
         int maxY = TidalConfig.maxRenderY;
-        // Vanilla blends the dithered texels (extra softening) while shaders draw them as opaque cutout, so pick the
-        // matching opacity. Resolved once per frame rather than per covered block.
-        boolean shaderActive = switch (TidalConfig.wetShaderMode) {
-            case AUTO -> IrisCompat.isShaderPackActive();
-            case FORCE_ON -> true;
-            case FORCE_OFF -> false;
-        };
-        float r = TidalConfig.wetRed / 255f;
-        float g = TidalConfig.wetGreen / 255f;
-        float b = TidalConfig.wetBlue / 255f;
-        float a = (shaderActive ? TidalConfig.wetAlphaShader : TidalConfig.wetAlpha) / 255f;
         for (BlockPos covered : coveredBlocks) {
             if (covered.getY() + 1 >= maxY) continue;
-            renderCoverOverlay(buffer, camera, covered, r, g, b, a);
+            renderCoverOverlay(buffer, camera, covered);
         }
     }
 
-    public void renderCoverOverlay(BufferBuilder buffer, Camera camera, BlockPos pos, float r, float g, float b, float a) {
+    public void renderCoverOverlay(BufferBuilder buffer, Camera camera, BlockPos pos) {
         MatrixStack matrices = new MatrixStack();
         Vec3d cameraPos = camera.getPos();
         Vec3d transPos = pos.toBottomCenterPos().subtract(cameraPos);
@@ -197,25 +185,23 @@ public class WaveRenderer {
         float v0 = sprite.getMinV();
         float v1 = sprite.getMaxV();
 
-        int light = TidalConfig.wetUseWorldLight
-                ? WorldRenderer.getLightmapCoordinates(world, pos.up())
-                : LightmapTextureManager.pack(0, 0);
+        int light = LightmapTextureManager.pack(0, 0);
 
         matrices.push();
         matrices.translate(transPos.x - 0.5, transPos.y + 1.01, transPos.z - 0.5); // offsets to the wave's position
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
 
         buffer.vertex(matrix4f, 0, 0, 0)
-                .color(r, g, b, a).texture(u0, v0).light(light);
+                .color(0.1f, 0.1f, 0.25f, 0.25f).texture(u0, v0).light(light);
 
         buffer.vertex(matrix4f, 0, 0, 1)
-                .color(r, g, b, a).texture(u0, v1).light(light);
+                .color(0.1f, 0.1f, 0.25f, 0.25f).texture(u0, v1).light(light);
 
         buffer.vertex(matrix4f, 1, 0, 1)
-                .color(r, g, b, a).texture(u1, v1).light(light);
+                .color(0.1f, 0.1f, 0.25f, 0.25f).texture(u1, v1).light(light);
 
         buffer.vertex(matrix4f, 1, 0, 0)
-                .color(r, g, b, a).texture(u1, v0).light(light);
+                .color(0.1f, 0.1f, 0.25f, 0.25f).texture(u1, v0).light(light);
 
         matrices.pop();
     }
