@@ -6,7 +6,7 @@
   "tidal_nn.midnightconfig.chunkUpdatesRescanAmount": "Chunk Updates Rescan Amount",
   "tidal_nn.midnightconfig.chunkUpdatesRescanAmount.tooltip": "The amount of block updates that should happen in a chunk before it is rescanned for wave spawning.",
   "tidal_nn.midnightconfig.maxRenderY": "Max Render Y",
-  "tidal_nn.midnightconfig.maxRenderY.tooltip": "Waves, wet overlays, and splash particles at or above this Y coordinate will not be rendered. Keep the default to disable culling.",
+  "tidal_nn.midnightconfig.maxRenderY.tooltip": "Waves, wet overlays, and splash particles at or above this Y coordinate will not be rendered. Set to 2048 to disable culling.",
   "tidal_nn.midnightconfig.debug": "Debug Mode",
   "tidal_nn.midnightconfig.debug.tooltip": "Helpful for figuring out where waves are spawning, and how.",
   "tidal_nn.midnightconfig.debugDocs": "§lDebug Docs",
